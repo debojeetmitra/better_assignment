@@ -37,7 +37,8 @@ const App = () => {
       await apiClient.patch(`/incidents/${id}/status`, { status });
       await fetchData();
     } catch (err) {
-      alert(err.message);
+      const errorMsg = typeof err === 'object' ? (err.error || JSON.stringify(err)) : err;
+      alert(`Action Failed: ${errorMsg}`);
     }
   };
 

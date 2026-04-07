@@ -16,7 +16,7 @@ class ProjectSchema(Schema):
 class IncidentSchema(Schema):
     id = fields.Int(dump_only=True)
     title = fields.Str(required=True, validate=validate.Length(min=5, max=200))
-    description = fields.Str(required=True, validate=validate.Length(min=10))
+    description = fields.Str(required=True, validate=validate.Length(min=20))
     severity = EnumField(Severity, by_value=True)
     status = EnumField(Status, by_value=True)
     created_at = fields.DateTime(dump_only=True)

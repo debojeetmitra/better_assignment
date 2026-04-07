@@ -40,11 +40,16 @@ const IncidentForm = ({ projects, onCancel, onSuccess }) => {
         <input 
           required
           placeholder="Short, descriptive title"
-          className="w-full bg-slate-900 border border-white border-opacity-10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+          className={`w-full bg-slate-900 border ${formData.title.length > 0 && formData.title.length < 5 ? 'border-accent' : 'border-white border-opacity-10'} rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
           value={formData.title}
           onChange={e => setFormData({...formData, title: e.target.value})}
         />
+        <p className={`text-[10px] mt-1 uppercase tracking-widest ${formData.title.length > 0 && formData.title.length < 5 ? 'text-accent' : 'text-muted'}`}>
+          {formData.title.length} / 5 chars minimum
+        </p>
       </div>
+
+      {/* ... Project Selector (Unchanged) ... */}
 
       <div>
         <label className="block text-sm font-medium text-muted mb-2">Project</label>
@@ -87,12 +92,17 @@ const IncidentForm = ({ projects, onCancel, onSuccess }) => {
         <textarea 
           required
           rows={4}
-          placeholder="Min 10 characters detailing the issue..."
-          className="w-full bg-slate-900 border border-white border-opacity-10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="Min 20 characters detailing the issue..."
+          className={`w-full bg-slate-900 border ${formData.description.length > 0 && formData.description.length < 20 ? 'border-accent' : 'border-white border-opacity-10'} rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary`}
           value={formData.description}
           onChange={e => setFormData({...formData, description: e.target.value})}
         />
-        <p className="text-[10px] text-muted mt-1 uppercase tracking-widest">A detailed description prevents invalid state transitions.</p>
+        <div className="flex justify-between items-center mt-1">
+          <p className={`text-[10px] uppercase tracking-widest ${formData.description.length > 0 && formData.description.length < 20 ? 'text-accent' : 'text-muted'}`}>
+            {formData.description.length} / 20 chars minimum
+          </p>
+          <p className="text-[10px] text-muted uppercase tracking-widest text-right">Detailed description prevents invalid state transitions.</p>
+        </div>
       </div>
 
       {error && (

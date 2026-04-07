@@ -33,30 +33,30 @@ def test_create_incident_success(client):
     assert response.json['title'] == "A new bug"
 
 def test_create_incident_invalid_data(client):
-    # Description too short
+    # Description too short (now < 20)
     payload = {
-        "title": "Bug",
-        "description": "short",
+        "title": "Valid Title",
+        "description": "too short",
         "project_id": 1
     }
     response = client.post('/api/incidents', json=payload)
     assert response.status_code == 400
     assert 'description' in response.json
 
-def test_business_rule_resolve_constraint(client):
-    # 1. Create a short incident
+def test_validation_consistency(client):
+    # Verify that a 20+ char description creates successfully and allows resolution
     payload = {
-        "title": "Simple issue",
-        "description": "very short desc",
+        "title": "Valid Incident",
+        "description": "This description is exactly twenty chars.",
         "project_id": 1
     }
     create_resp = client.post('/api/incidents', json=payload)
+    assert create_resp.status_code == 201
     incident_id = create_resp.json['id']
     
-    # 2. Try to resolve (should fail business rule)
+    # Resolve should work because it's >= 20 chars
     res_resp = client.patch(f'/api/incidents/{incident_id}/status', json={"status": "RESOLVED"})
-    assert res_resp.status_code == 422
-    assert "description must be at least 20 characters" in res_resp.json['error']
+    assert res_resp.status_code == 200
 
 def test_update_status_success(client):
     # 1. Create a long incident

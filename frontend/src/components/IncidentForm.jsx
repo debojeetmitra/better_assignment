@@ -96,8 +96,22 @@ const IncidentForm = ({ projects, onCancel, onSuccess }) => {
       </div>
 
       {error && (
-        <div className="bg-red-500 bg-opacity-10 text-red-500 p-4 rounded-xl text-sm font-medium border border-red-500 border-opacity-20">
-          {typeof error === 'string' ? error : JSON.stringify(error)}
+        <div className="bg-accent bg-opacity-10 border border-accent border-opacity-20 p-4 rounded-xl">
+          <p className="text-accent font-bold text-sm mb-2 flex items-center gap-2">
+            <ShieldAlert size={16} />
+            Validation Error
+          </p>
+          <ul className="text-xs text-slate-300 space-y-1 list-disc list-inside">
+            {typeof error === 'string' ? (
+              <li>{error}</li>
+            ) : (
+              Object.entries(error).map(([field, messages]) => (
+                <li key={field} className="capitalize">
+                  <span className="font-semibold">{field}:</span> {Array.isArray(messages) ? messages.join(', ') : messages}
+                </li>
+              ))
+            )}
+          </ul>
         </div>
       )}
 
